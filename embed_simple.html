@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- This code is very similar to what is collected from the Embed Code in the Share button, although that will not
+contain attributes like toolbar or width -->
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <title>Simple Embed Demo</title>
+</head>
+
+<body>
+  <script src="https://online.tableau.com/javascripts/api/tableau.embedding.3.latest.js" type="module"></script>
+
+  <!-- Add token here -->
+  <tableau-viz device="default" hide-tabs="" id="tableauViz"
+    src="https://10ax.online.tableau.com/t/praveendatadev/views/SvenNysFinal/OLD2"
+    style="width: 100%; max-width: 2000px; height: 500px; max-height: 1000px" token="ADD_TOKEN_HERE" toolbar="hidden"
+    width="1200px">
+  </tableau-viz>
+  <!-- You can also add specific sizing attributes to the tableau-viz tag, like width and height. The width and height
+  is necessary to ensure the height of the div where the content is placed, provided sufficient space we can then load
+  the viz based on sizing set in the dashboard -->
+
+</body>
+
+</html>

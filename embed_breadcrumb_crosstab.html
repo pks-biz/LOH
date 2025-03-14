@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="IE=edge" http-equiv="X-UA-Compatible" />
+  <title>Tableau Demo with Breadcrumb and CrossTab</title>
+  <script type="module">
+    import { TableauViz, TableauEventType, TableauDialogType, CrosstabFileFormat } from "https://online.tableau.com/javascripts/api/tableau.embedding.3.latest.min.js"
+    const tableauViz = document.querySelector('tableau-viz');
+
+    tableauViz.addEventListener(TableauEventType.FirstInteractive, (e) => {
+      { {/*  Event listener to assign data to breadcrumb on first load  */ } }
+      document.getElementById('breadcrumb').innerHTML = `${tableauViz.workbook.name} > ${tableauViz.workbook.activeSheet.name}`;
+
+      { {/*  Event listener to assign action to the export-pdf button  */ } }
+      document.getElementById('export-pdf').onclick = async () => {
+        await tableauViz.displayDialogAsync(TableauDialogType.ExportPDF);
+      };
+
+      const crosstabFileFormat = CrosstabFileFormat.Excel;
+      { {/*  Event listener to assign action to the export-crosstab/Download Data button  */ } }
+      document.getElementById('export-crosstab').onclick = async () => {
+        const parameters = await tableauViz.workbook.getParametersAsync();
+
+        { {/*  Parameter called "Export Crosstab Sheet Name" is searched for in Array of parameters  */ } }
+        const sheetName = parameters.find((p) => p.name === "Export Crosstab Sheet Name").currentValue.value;
+        tableauViz.exportCrosstabAsync(sheetName, crosstabFileFormat)
+      };
+    });
+
+    { {/*  Event listener to assign data to breadcrumb on subsequent tab changes  */ } }
+    tableauViz.addEventListener(TableauEventType.TabSwitched, (e) => {
+      document.getElementById('breadcrumb').innerHTML = `${tableauViz.workbook.name} > ${tableauViz.workbook.activeSheet.name}`;
+    });
+
+  </script>
+</head>
+
+<body>
+  <div style="border: 5px dotted blue; padding:4px; margin:4px">A simple breadcrumb
+    <h3 id="breadcrumb"></h3>
+  </div>
+  <button id="export-pdf" type="button">Export to PDF</button>
+  <button id="export-crosstab" type="button">Download Data</button>
+
+  <!-- Add token here -->
+  <tableau-viz device="default" height="1000px" hide-tabs="" id="tableauViz"
+    src="https://10ax.online.tableau.com/t/praveendatadev/views/BiztoryBEFinancials/BEFinance-ActualvsBudget"
+    style="width: 100%; max-width: 1200px; height: 1000px; max-height: 1000px" token="ADD_TOKEN_HERE" toolbar="bottom"
+    width="1200px">
+  </tableau-viz>
+  <!-- You can also add specific sizing attributes to the tableau-viz tag, like width and height. The width and height
+  is necessary to ensure the height of the div where the content is placed, provided sufficient space we can then load
+  the viz based on sizing set in the dashboard -->
+
+</body>
+
+</html>
